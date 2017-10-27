@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Message {
+public class Message extends MutableMapping {
 
     public Message(HashMap<String,Object> args) {
         throw new UnsupportedOperationException();
