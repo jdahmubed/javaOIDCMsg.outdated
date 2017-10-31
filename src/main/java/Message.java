@@ -5,13 +5,13 @@ import org.json.JSONObject;
 import org.omg.CORBA.DynAnyPackage.InvalidValue;
 
 import java.security.InvalidKeyException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Message extends MutableMapping {
 
-    public Message(HashMap<String,Object> args) {
+    public Message(Map<String,Object> args) {
         throw new UnsupportedOperationException();
     }
 
@@ -25,19 +25,27 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String, Object> toDictionary(int lev) throws InvalidKeyException, InvalidValue {
+    public Map<String, Object> toMap(int lev) throws InvalidKeyException, InvalidValue {
         throw new UnsupportedOperationException();
     }
 
-    public Message fromDictionary(HashMap<Object, String> dictionary) throws InvalidKeyException, InvalidValue {
+    public Message fromDictionary(Map<Object, String> dictionary) throws InvalidKeyException, InvalidValue {
         throw new UnsupportedOperationException();
     }
 
-    private void addValue(Object skey, Object vtyp, Object key, Object val, Object _deser, boolean isNullAllowed)
+    /**
+     * @param: _deser this is a NoneType in Python, which I believe
+     *         could translate to an Object type in Java
+     */
+    private void addValue(String skey, String vtyp, String key, String val, Object _deser, boolean isNullAllowed)
             throws Exception, DecodeError, InvalidValue, IllegalArgumentException, TooManyValues {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @param: indent this is a NoneType in Python, which I believe
+     *         could translate to an Object type in Java
+     */
     public JSONObject toJson(int lev, Object indent) {
         throw new UnsupportedOperationException();
     }
@@ -46,21 +54,21 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public JWT toJwt(Object key, String algorithm, int lev) {
+    public JWT toJwt(List key, String algorithm, int lev) {
         throw new UnsupportedOperationException();
     }
 
-    private void addKey(HashMap<String,String> keyJar, Object issuer, Object key, String keyType, String kid, Object noKidIssuer)
+    private void addKey(KeyJar keyJar, Object issuer, Object key, String keyType, String kid, Object noKidIssuer)
         throws KeyError {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList<Object> getVerifyKeys(KeyJar keyJar, Set key, HashMap<String,Object> jso, HashMap<String,String> header, JWT jwt, HashMap<String,Object> args)
+    public List<Object> getVerifyKeys(KeyJar keyJar, Set key, Map<String,Object> jso, Map<String,String> header, JWT jwt, Map<String,Object> args)
         throws KeyError {
         throw new UnsupportedOperationException();
     }
 
-    public Message fromJwt(JWT txt, Object key, boolean verify, KeyJar keyjar, HashMap<String,Object> args)
+    public Message fromJwt(JWT txt, List key, boolean shouldVerify, KeyJar keyjar, Map<String,Object> args)
         throws AssertionError, InvalidAlgorithmException, InvalidSignatureValueException, InvalidKeyException, Exception {
         throw new UnsupportedOperationException();
     }
@@ -73,11 +81,11 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public boolean verify(HashMap<String,Object> args) throws KeyError, MissingRequiredAttribute, InvalidValue, NotAllowedValue{
+    public boolean verify(Map<String,Object> args) throws KeyError, MissingRequiredAttribute, InvalidValue, NotAllowedValue{
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList<Object> getKeys() {
+    public List<Object> getKeys() {
         throw new UnsupportedOperationException();
     }
 
@@ -89,11 +97,16 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList<HashMap<Object, Object>> getItems() {
+    /**
+     *
+     * @return List<Map<String, Object>> This is because the return value could be a list of
+     *                                  maps of a string to a string, int, or list of strings.
+     */
+    public List<Map<String, Object>> getItems() {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList<Object> getValues() {
+    public List<Object> getValues() {
         throw new UnsupportedOperationException();
     }
 
@@ -113,7 +126,7 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public void deleteItem(Object key) {
+    public void deleteItem(String key) {
         throw new UnsupportedOperationException();
     }
 
@@ -121,7 +134,7 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String, Object> extra() {
+    public Map<String, Object> extra() {
         throw new UnsupportedOperationException();
     }
 
@@ -133,11 +146,11 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public JWE toJwe(HashMap<String,Object> keys, ContentEncryptionAlgorithm enc, KeyManagementAlgorithm alg, int lev) {
+    public JWE toJwe(Map<String,Object> keys, ContentEncryptionAlgorithm enc, KeyManagementAlgorithm alg, int lev) {
         throw new UnsupportedOperationException();
     }
 
-    public Message fromJwe(JWE msg, HashMap<String,Object> keys) {
+    public Message fromJwe(JWE msg, Map<String,Object> keys) {
         throw new UnsupportedOperationException();
     }
 
