@@ -2,7 +2,8 @@ import com.auth0.jwt.interfaces.Payload;
 import exceptions.KeyError;
 import exceptions.NoSuitableSigningKeys;
 
-import java.util.HashMap;
+import java.security.Key;
+import java.util.Map;
 
 public class JWT {
 
@@ -15,27 +16,27 @@ public class JWT {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String, Object> packInit() {
+    public Map<String, Object> packInit() {
         throw new UnsupportedOperationException();
     }
 
-    public Object packKey(String owner, String kid) throws NoSuitableSigningKeys {
+    public Key packKey(String owner, String kid) throws NoSuitableSigningKeys {
         throw new UnsupportedOperationException();
     }
 
-    public String pack(String kid, String owner, Object clsInstance, HashMap<String,Object> args) throws KeyError{
+    public String pack(String kid, String owner, Object clsInstance, Map<String,Object> args) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    private Object verify(Object rj, Object token) {
+    private Map<String,Object> verify(JWS rj, String token) {
         throw new UnsupportedOperationException();
     }
 
-    private Object decrypt(Object rj, Object token) throws KeyError{
+    private byte[] decrypt(JWE rj, String token) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    public Object unpack(Object token) throws KeyError, Exception{
+    public Object unpack(String token) throws KeyError, Exception{
         throw new UnsupportedOperationException();
     }
 

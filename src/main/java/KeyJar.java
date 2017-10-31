@@ -4,17 +4,15 @@ import exceptions.MessageException;
 import org.omg.CORBA.DynAnyPackage.InvalidValue;
 
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 public class KeyJar {
 
-    private HashMap<String,Object> issuerKeys;
+    private Map<String,Object> issuerKeys;
     private boolean verifySSL;
     private long removeAfter;
 
-    public KeyJar(HashMap<String,Object> issuerKeys, boolean verifySSL, long removeAfter) {
+    public KeyJar(Map<String,Object> issuerKeys, boolean verifySSL, long removeAfter) {
         this.issuerKeys = issuerKeys;
         this.verifySSL = verifySSL;
         this.removeAfter = removeAfter;
@@ -24,19 +22,19 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public KeyBundle add(String issuer, String url, HashMap<String,Object> args) throws KeyError{
+    public KeyBundle add(String issuer, String url, Map<String,Object> args) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    public void addSymmetric(String issuer, Object key, ArrayList usage) {
+    public void addSymmetric(String issuer, String key, List usage) {
         throw new UnsupportedOperationException();
     }
 
-    public void addKb(String issuer, Object kb) throws KeyError{
+    public void addKb(String issuer, KeyBundle kb) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    public void setItem(String issuer, Object val) {
+    public void setItem(String issuer, KeyBundle val) {
         throw new UnsupportedOperationException();
     }
 
@@ -44,24 +42,24 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList get(Key keyUse, KeyType keyType, String issuer, String kid, HashMap<String,Object> args)
+    public List get(String keyUse, String keyType, String issuer, Object kid, Map<String,Object> args)
         throws KeyError, AssertionError{
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getSigningKey(KeyType keyType, String owner, String kid, HashMap<String,Object> args) {
+    public List getSigningKey(String keyType, String owner, Object kid, Map<String,Object> args) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getVerifyKey(KeyType keyType, String owner, String kid, HashMap<String,Object> args) {
+    public List getVerifyKey(String keyType, String owner, Object kid, Map<String,Object> args) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getEncryptKey(KeyType keyType, String owner, String kid, HashMap<String,Object> args) {
+    public List getEncryptKey(String keyType, String owner, Object kid, Map<String,Object> args) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getDecryptKey(KeyType keyType, String owner, String kid, HashMap<String,Object> args) {
+    public List getDecryptKey(String keyType, String owner, Object kid, Map<String,Object> args) {
         throw new UnsupportedOperationException();
     }
 
@@ -73,31 +71,31 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList xKeys(String var, Object part) {
+    public List<Key> xKeys(String var, String part) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList verifyKeys(Object part) {
+    public List<Key> verifyKeys(String part) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList decryptKeys(Object part) {
+    public List<Key> decryptKeys(String part) {
         throw new UnsupportedOperationException();
     }
 
-    public Object getItem(String issuer) throws KeyError{
+    public List<KeyBundle> getItem(String issuer) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    public void removeKey(String issuer, KeyType keyType, Key key) throws KeyError {
+    public void removeKey(String issuer, String keyType, Key key) throws KeyError {
         throw new UnsupportedOperationException();
     }
 
-    public void update(Object kj) throws KeyError{
+    public void update(KeyJar kj) throws KeyError{
         throw new UnsupportedOperationException();
     }
 
-    public Object matchOwner(String url) throws KeyIOError {
+    public String matchOwner(String url) throws KeyIOError {
         throw new UnsupportedOperationException();
     }
 
@@ -105,29 +103,29 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getKeys() {
+    public List getKeys() {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String,Object> loadKeys(String pcr, String issuer, boolean replace)
+    public void loadKeys(Map<String,String> pcr, String issuer, boolean replace)
         throws MessageException, KeyError
     {
         throw new UnsupportedOperationException();
     }
 
-    public Object find(String source, String issuer) throws KeyError {
+    public KeyBundle find(String source, String issuer) throws KeyError {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList dumpIssuerKeys(String issuer) throws KeyError {
+    public List dumpIssuerKeys(String issuer) throws KeyError {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String,Object> exportJwks(boolean isPrivate, String issuer) {
+    public Map<String,Object> exportJwks(boolean isPrivate, String issuer) {
         throw new UnsupportedOperationException();
     }
 
-    public void importJwks(HashMap<String,Object> jwks, String issuer) throws KeyError, InvalidValue {
+    public void importJwks(Map<String,Object> jwks, String issuer) throws KeyError, InvalidValue {
         throw new UnsupportedOperationException();
     }
 
@@ -135,11 +133,11 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String, Object> dump() {
+    public Map<String, Object> dump() {
         throw new UnsupportedOperationException();
     }
 
-    public void restore(HashMap<String,Object> info) {
+    public void restore(Map<String,Object> info) {
         throw new UnsupportedOperationException();
     }
 
@@ -147,11 +145,11 @@ public class KeyJar {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList keysByAlgAndUsage(String issuer, Object alg, String usage) {
+    public List keysByAlgAndUsage(String issuer, String alg, String usage) {
         throw new UnsupportedOperationException();
     }
 
-    public ArrayList getIssuerKeys(String issuer) {
+    public List getIssuerKeys(String issuer) {
         throw new UnsupportedOperationException();
     }
 

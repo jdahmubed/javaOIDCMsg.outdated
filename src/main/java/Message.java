@@ -29,7 +29,7 @@ public class Message extends MutableMapping {
         throw new UnsupportedOperationException();
     }
 
-    public Message fromDictionary(Map<Object, String> dictionary) throws InvalidKeyException, InvalidValue {
+    public Message fromMap(Map<Object, String> map) throws InvalidKeyException, InvalidValue {
         throw new UnsupportedOperationException();
     }
 
