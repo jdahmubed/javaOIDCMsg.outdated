@@ -19,6 +19,17 @@ public class MainTestSignatures {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
+    public void testStandardClaimsNotRequired() throws Exception {
+        //still passes even if no claims are supplied
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = JWT.create()
+                .sign(algorithm);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+    }
+
+    @Test
     public void testComplainOnNone() throws Exception {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The Algorithm cannot be null.");
