@@ -83,4 +83,34 @@ public class MainTestSignatures {
                 .build();
         DecodedJWT jwt = verifier.verify(token);
     }
+
+    @Test
+    public void testVerifyingWithEmptyKey() throws Exception {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Empty key");
+        Algorithm algorithm = Algorithm.HMAC256("");
+        String token = JWT.create().withIssuer("accounts.fake.com").withSubject("subject")
+                .withAudience("audience")
+                .sign(algorithm);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("accounts.fake.com")
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+    }
+
+    @Test
+    public void testConfigurableToMultipleKeys() throws Exception {
+        thrown.expect(InvalidClaimException.class);
+        thrown.expectMessage("The Claim 'issuer' value doesn't match the required one.");
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String[] arr = {"iss1", "iss2", "iss3"};
+        String token = JWT.create().withArrayClaim("issuer", arr).withSubject("subject")
+                .withAudience("audience")
+                .sign(algorithm);
+        String[] arr2 = {"iss1", "iss2", "iss4"};
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withArrayClaim("issuer", arr2)
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+    }
 }
