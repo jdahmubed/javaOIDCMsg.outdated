@@ -1,4 +1,11 @@
 package exceptions;
 
-public class ValueError {
+public class ValueError extends Exception {
+
+    private String message;
+
+    public ValueError(String message) {
+        this.message = message;
+    }
+
 }
