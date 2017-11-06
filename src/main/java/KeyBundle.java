@@ -4,7 +4,6 @@ import org.json.JSONObject;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.security.Key;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,11 +42,11 @@ public class KeyBundle {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String,Object> get(String typ) {
+    public Map<String,Object> get(String typ) {
         throw new UnsupportedOperationException();
     }
 
-    public HashMap<String,Object> getKeys() {
+    public Map<String,Object> getKeys() {
         throw new UnsupportedOperationException();
     }
 

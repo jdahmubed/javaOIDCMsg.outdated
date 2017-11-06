@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="java-jwt">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../java-jwt/out/artifacts/java_jwt_jar/java-jwt.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
