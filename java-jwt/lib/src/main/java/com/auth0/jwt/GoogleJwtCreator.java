@@ -1,12 +1,9 @@
 package com.auth0.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.impl.PublicClaims;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class GoogleJwtCreator extends JWTCreator.Builder{
 
@@ -101,16 +98,23 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     }
 
     /**
+     * Developer specifies whether they want the None algo to be allowed or not
+     */
+    public GoogleJwtCreator setIsNoneAlgorithmAllowed(boolean isNoneAlgorithmAllowed) {
+        jwt.setIsNoneAlgorithmAllowed(isNoneAlgorithmAllowed);
+        return this;
+    }
+
+    /**
      * Add an algorithm
      * @param algorithm
      */
-    public String sign(Algorithm algorithm) {
-        String JWS = jwt.sign(algorithm);
-        try {
-            verifyClaims();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public String sign(Algorithm algorithm) throws Exception {
+        if(!jwt.getIsNoneAlgorithmAllowed() && algorithm.equals(Algorithm.none())) {
+            throw new IllegalAccessException("None algorithm isn't allowed");
         }
+        String JWS = jwt.sign(algorithm);
+        verifyClaims();
         return JWS;
     }
 

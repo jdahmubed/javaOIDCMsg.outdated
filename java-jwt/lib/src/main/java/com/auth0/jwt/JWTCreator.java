@@ -58,10 +58,12 @@ public final class JWTCreator {
     public static class Builder {
         private final Map<String, Object> payloadClaims;
         private Map<String, Object> headerClaims;
+        private boolean isNoneAlgorithmAllowed;
 
         Builder() {
             this.payloadClaims = new HashMap<>();
             this.headerClaims = new HashMap<>();
+            this.isNoneAlgorithmAllowed = false;
         }
 
         /**
@@ -162,6 +164,15 @@ public final class JWTCreator {
         public Builder withJWTId(String jwtId) {
             addClaim(PublicClaims.JWT_ID, jwtId);
             return this;
+        }
+
+        public Builder setIsNoneAlgorithmAllowed(boolean isNoneAlgorithm) {
+            this.isNoneAlgorithmAllowed = isNoneAlgorithm;
+            return this;
+        }
+
+        public boolean getIsNoneAlgorithmAllowed() {
+            return this.isNoneAlgorithmAllowed;
         }
 
         /**
@@ -298,7 +309,7 @@ public final class JWTCreator {
          * @throws IllegalArgumentException if the provided algorithm is null.
          * @throws JWTCreationException     if the claims could not be converted to a valid JSON or there was a problem with the signing key.
          */
-        public String sign(Algorithm algorithm) throws IllegalArgumentException, JWTCreationException {
+        public String sign(Algorithm algorithm) throws Exception {
             if (algorithm == null) {
                 throw new IllegalArgumentException("The Algorithm cannot be null.");
             }
