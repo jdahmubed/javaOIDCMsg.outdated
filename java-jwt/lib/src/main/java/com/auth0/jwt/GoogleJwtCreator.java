@@ -55,7 +55,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     /**
      * Add an issuer
      */
-    public GoogleJwtCreator withIssuer(String issuer) {
+    public GoogleJwtCreator withIssuer(String... issuer) {
         jwt.withIssuer(issuer);
         addedClaims.put("Issuer", true);
         return this;
@@ -64,7 +64,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     /**
      * Add a subject
      */
-    public GoogleJwtCreator withSubject(String subject) {
+    public GoogleJwtCreator withSubject(String... subject) {
         jwt.withSubject(subject);
         addedClaims.put("Subject", true);
         return this;
@@ -73,7 +73,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     /**
      * Add an audience
      */
-    public GoogleJwtCreator withAudience(String audience) {
+    public GoogleJwtCreator withAudience(String... audience) {
         jwt.withAudience(audience);
         addedClaims.put("Audience", true);
         return this;

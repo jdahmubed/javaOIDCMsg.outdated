@@ -95,7 +95,7 @@ public final class JWTCreator {
          * @param issuer the Issuer value.
          * @return this same Builder instance.
          */
-        public Builder withIssuer(String issuer) {
+        public Builder withIssuer(String... issuer) {
             addClaim(PublicClaims.ISSUER, issuer);
             return this;
         }
@@ -106,7 +106,7 @@ public final class JWTCreator {
          * @param subject the Subject value.
          * @return this same Builder instance.
          */
-        public Builder withSubject(String subject) {
+        public Builder withSubject(String... subject) {
             addClaim(PublicClaims.SUBJECT, subject);
             return this;
         }

@@ -138,7 +138,7 @@ public class JWT {
          * @return this same Verification instance.
          */
         @Override
-        public Verification withIssuer(String issuer) {
+        public Verification withIssuer(String... issuer) {
             requireClaim(PublicClaims.ISSUER, issuer);
             return this;
         }
@@ -150,7 +150,7 @@ public class JWT {
          * @return this same Verification instance.
          */
         @Override
-        public Verification withSubject(String subject) {
+        public Verification withSubject(String... subject) {
             requireClaim(PublicClaims.SUBJECT, subject);
             return this;
         }
@@ -437,13 +437,13 @@ public class JWT {
                     assertValidDateClaim(jwt.getNotBefore(), (Long) entry.getValue(), false);
                     break;
                 case PublicClaims.ISSUER:
-                    assertValidStringClaim(entry.getKey(), jwt.getIssuer(), (String) entry.getValue());
+                    assertValidIssuerClaim(jwt.getIssuer(), (List<String>) entry.getValue());
                     break;
                 case PublicClaims.JWT_ID:
                     assertValidStringClaim(entry.getKey(), jwt.getId(), (String) entry.getValue());
                     break;
                 case PublicClaims.SUBJECT:
-                    assertValidStringClaim(entry.getKey(), jwt.getSubject(), (String) entry.getValue());
+                    assertValidSubjectClaim(jwt.getSubject(), (List<String>) entry.getValue());
                     break;
                 default:
                     assertValidClaim(jwt.getClaim(entry.getKey()), entry.getKey(), entry.getValue());
@@ -510,6 +510,17 @@ public class JWT {
     private void assertValidAudienceClaim(List<String> audience, List<String> value) {
         if (audience == null || !audience.containsAll(value)) {
             throw new InvalidClaimException("The Claim 'aud' value doesn't contain the required audience.");
+        }
+    }
+
+    private void assertValidIssuerClaim(List<String> issuer, List<String> value) {
+        if (issuer == null || !issuer.containsAll(value)) {
+            throw new InvalidClaimException("The Claim 'iss' value doesn't match the required one.");
+        }
+    }
+    private void assertValidSubjectClaim(List<String> subject, List<String> value) {
+        if (subject == null || !subject.containsAll(value)) {
+            throw new InvalidClaimException("The Claim 'sub' value doesn't match the required one.");
         }
     }
 }
