@@ -139,7 +139,7 @@ public class JWT {
          */
         @Override
         public Verification withIssuer(String... issuer) {
-            requireClaim(PublicClaims.ISSUER, issuer);
+            requireClaim(PublicClaims.ISSUER, Arrays.asList(issuer));
             return this;
         }
 
@@ -151,7 +151,7 @@ public class JWT {
          */
         @Override
         public Verification withSubject(String... subject) {
-            requireClaim(PublicClaims.SUBJECT, subject);
+            requireClaim(PublicClaims.SUBJECT, Arrays.asList(subject));
             return this;
         }
 

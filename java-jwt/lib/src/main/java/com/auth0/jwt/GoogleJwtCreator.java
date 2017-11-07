@@ -1,14 +1,18 @@
 package com.auth0.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.impl.PublicClaims;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GoogleJwtCreator extends JWTCreator.Builder{
 
     private JWTCreator.Builder jwt;
     private HashMap<String, Boolean> addedClaims;
+    private Set<String> publicClaims;
 
     public GoogleJwtCreator() {
         jwt = JWT.create();
@@ -22,6 +26,16 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
             put("Audience", false);
             put("Iat", false);
             put("Exp", false);
+        }};
+        publicClaims = new HashSet<String>()
+        {{
+            add(PublicClaims.ISSUER);
+            add(PublicClaims.SUBJECT);
+            add(PublicClaims.EXPIRES_AT);
+            add(PublicClaims.NOT_BEFORE);
+            add(PublicClaims.ISSUED_AT);
+            add(PublicClaims.JWT_ID);
+            add(PublicClaims.AUDIENCE);
         }};
     }
 
@@ -94,6 +108,21 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     public GoogleJwtCreator withExp(Date exp) {
         jwt.withExpiresAt(exp);
         addedClaims.put("Exp", true);
+        return this;
+    }
+
+    /**
+     * Add nonstandard claim
+     */
+    public GoogleJwtCreator withNonStandardClaim(String key, String value) {
+        jwt.withNonStandardClaim(key, value);
+        return this;
+    }
+
+    public GoogleJwtCreator withArrayClaim(String name, String[] items) throws IllegalArgumentException {
+        jwt.withArrayClaim(name, items);
+        if(publicClaims.contains(name))
+            addedClaims.put(name, true);
         return this;
     }
 
