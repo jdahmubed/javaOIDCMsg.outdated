@@ -98,14 +98,37 @@ public class JWT {
         }
 
         /**
-         * Create Verification object
+         * Create Verification object for verification purposes
+         * @param picture
+         * @param email
          * @param issuer
-         * @param subject
          * @param audience
+         * @param exp
+         * @param iat
+         * @param name
          * @return
          */
-        public Verification createVerifier(String issuer, String subject, String audience) {
-            return withIssuer(issuer).withSubject(subject).withAudience(audience);
+        public Verification createVerifierForGoogle(String picture, String email, String issuer,
+                                                    String audience, Date exp, Date iat, String name) {
+            return withPicture(picture).withEmail(email).withIssuer(issuer).withAudience(audience);
+        }
+
+        @Override
+        public Verification withPicture(String picture) {
+            requireClaim("picture", picture);
+            return this;
+        }
+
+        @Override
+        public Verification withEmail(String email) {
+            requireClaim("email", email);
+            return this;
+        }
+
+        @Override
+        public Verification withName(String name) {
+            requireClaim("name", name);
+            return this;
         }
 
         /**

@@ -1,27 +1,26 @@
 package com.auth0.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.InvalidClaimException;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.mockito.Mockito;
 
-import java.util.Date;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class GoogleJwtCreatorTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    private Date exp = generateRandomExpDateInFuture();
+    private Date iat = generateRandomIatDateInPast();
 
     @Test
     public void testGoogleJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
@@ -32,12 +31,13 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -52,13 +52,14 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -74,14 +75,15 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .setIsNoneAlgorithmAllowed(false)
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -97,13 +99,14 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -116,14 +119,15 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .setIsNoneAlgorithmAllowed(true)
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -132,42 +136,22 @@ public class GoogleJwtCreatorTest {
         thrown.expect(InvalidClaimException.class);
         thrown.expectMessage("The Claim 'iss' value doesn't match the required one.");
 
-        Algorithm algorithm = Algorithm.HMAC256("secret");
+        Algorithm algorithm = Algorithm.none();
         String token = GoogleJwtCreator.build()
                 .withPicture("picture")
                 .withEmail("email")
                 .withIssuer("invalid")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
+                .setIsNoneAlgorithmAllowed(true)
                 .withName("name")
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
-        DecodedJWT jwt = verifier.decode(token);
-    }
-
-    @Test
-    public void testGoogleJwtCreatorInvalidSubject() throws Exception {
-        thrown.expect(InvalidClaimException.class);
-        thrown.expectMessage("The Claim 'sub' value doesn't match the required one.");
-
-        Algorithm algorithm = Algorithm.HMAC256("secret");
-        String token = GoogleJwtCreator.build()
-                .withPicture("picture")
-                .withEmail("email")
-                .withIssuer("accounts.fake.com")
-                .withSubject("invalid")
-                .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
-                .withName("name")
-                .sign(algorithm);
-
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -183,13 +167,14 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("invalid")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .sign(algorithm);
 
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -202,13 +187,61 @@ public class GoogleJwtCreatorTest {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorExpTimeHasPassed() throws Exception {
+        thrown.expect(TokenExpiredException.class);
+        thrown.expectMessage("The Token has expired on Wed Oct 29 00:00:00 PDT 2014.");
+
+        String myDate = "2014/10/29";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = sdf.parse(myDate);
+        long exp = date.getTime();
+        Date expDate = new Date(exp);
+
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture("picture")
+                .withEmail("email")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(expDate)
+                .withIat(iat)
+                .withName("name")
+                .sign(algorithm);
+        Verification verification = JWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                expDate, iat, "name").build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    public static Date generateRandomExpDateInFuture() {
+        Random rnd = new Random();
+        return new Date(Math.abs(System.currentTimeMillis() + rnd.nextLong()));
+    }
+
+    public static Date generateRandomIatDateInPast() {
+        GregorianCalendar gc = new GregorianCalendar();
+        int year = randBetween(1900, 2010);
+        gc.set(gc.YEAR, year);
+        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
+        gc.set(gc.DAY_OF_YEAR, dayOfYear);
+
+        return new Date(gc.getTimeInMillis());
+    }
+
+    public static int randBetween(int start, int end) {
+        return start + (int)Math.round(Math.random() * (end - start));
     }
 }

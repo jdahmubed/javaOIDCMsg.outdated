@@ -37,7 +37,14 @@ public interface Verification {
 
     Verification withArrayClaim(String name, Integer... items) throws IllegalArgumentException;
 
-    Verification createVerifier(String issuer, String subject, String audience) throws IllegalArgumentException;
+    Verification createVerifierForGoogle(String picture, String email, String issuer,
+                                         String audience, Date exp, Date iat, String name);
+
+    Verification withPicture(String picture);
+
+    Verification withEmail(String email);
+
+    Verification withName(String name);
 
     JWT build();
 }

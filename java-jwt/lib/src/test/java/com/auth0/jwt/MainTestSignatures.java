@@ -1,5 +1,7 @@
 package com.auth0.jwt;
 
+import static com.auth0.jwt.GoogleJwtCreatorTest.generateRandomExpDateInFuture;
+import static com.auth0.jwt.GoogleJwtCreatorTest.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -15,6 +17,8 @@ public class MainTestSignatures {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    private Date exp = generateRandomExpDateInFuture();
+    private Date iat = generateRandomIatDateInPast();
 
     @Test
     public void testComplainOnNone() throws Exception {
@@ -25,10 +29,10 @@ public class MainTestSignatures {
                 .withAudience("audience")
                 .sign(null);
         Verification verification = JWT.require(null);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
-
     @Test
     public void testVerifyingWithEmptyKey() throws Exception {
         thrown.expect(IllegalArgumentException.class);
@@ -40,13 +44,14 @@ public class MainTestSignatures {
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("accounts.fake.com", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                exp, iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -60,14 +65,15 @@ public class MainTestSignatures {
                 .withEmail("email")
                 .withSubject("subject")
                 .withAudience("audience")
-                .withExp(new Date(2017,12,1))
-                .withIat(new Date(1477592000))
+                .withExp(exp)
+                .withIat(iat)
                 .withName("name")
                 //.withIssuer("issuer")
                 .withArrayClaim(PublicClaims.ISSUER, arr)
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifier("issuer", "subject", "audience").build();
+        JWT verifier = verification.createVerifierForGoogle("picture", "email","accounts.fake.com", "audience",
+                new Date(2017,12,1), iat, "name").build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
