@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import java.util.Date;
 import java.util.HashMap;
 
-public class MainTestSignatures {
+public class GoogleJwtCreatorTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
