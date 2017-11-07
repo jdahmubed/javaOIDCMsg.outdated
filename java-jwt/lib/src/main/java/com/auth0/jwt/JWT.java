@@ -24,13 +24,16 @@ public class JWT {
     }
 
     /**
-     * Decode a given Json Web Token.
+     * Convert the given token to a DecodedJWT
      * <p>
      * Note that this method <b>doesn't verify the token's signature!</b> Use it only if you trust the token or you already verified it.
      *
      * @param token with jwt format as string.
      * @return a decoded JWT.
-     * @throws JWTDecodeException if any part of the token contained an invalid jwt or JSON format of each of the jwt parts.
+     * @throws AlgorithmMismatchException     if the algorithm stated in the token's header it's not equal to the one defined in the {@link JWT}.
+     * @throws SignatureVerificationException if the signature is invalid.
+     * @throws TokenExpiredException          if the token has expired.
+     * @throws InvalidClaimException          if a claim contained a different value than the expected one.
      */
     public DecodedJWT decode(String token) throws JWTDecodeException {
         DecodedJWT jwt = new JWTDecoder(token);
@@ -66,10 +69,10 @@ public class JWT {
 
 
     /**
-     * Initialize a JWTVerifier instance using the given Algorithm.
+     * Initialize a Verification instance using the given Algorithm.
      *
      * @param algorithm the Algorithm to use on the JWT verification.
-     * @return a JWTVerifier.Verification instance to configure.
+     * @return a JWT.BaseVerification instance to configure.
      * @throws IllegalArgumentException if the provided algorithm is null.
      */
     static Verification init(Algorithm algorithm) throws IllegalArgumentException {
@@ -95,7 +98,7 @@ public class JWT {
         }
 
         /**
-         * Create JWT verifier
+         * Create Verification object
          * @param issuer
          * @param subject
          * @param audience
@@ -334,9 +337,9 @@ public class JWT {
         }
 
         /**
-         * Creates a new and reusable instance of the JWTVerifier with the configuration already provided.
+         * Creates a new and reusable instance of the JWT with the configuration already provided.
          *
-         * @return a new JWTVerifier instance.
+         * @return a new JWT instance.
          */
         @Override
         public JWT build() {
@@ -344,11 +347,11 @@ public class JWT {
         }
 
         /**
-         * Creates a new and reusable instance of the JWTVerifier with the configuration already provided.
+         * Creates a new and reusable instance of the JWT the configuration already provided.
          * ONLY FOR TEST PURPOSES.
          *
          * @param clock the instance that will handle the current time.
-         * @return a new JWTVerifier instance with a custom Clock.
+         * @return a new JWT instance with a custom Clock.
          */
         public JWT build(Clock clock) {
             addLeewayToDateClaims();
