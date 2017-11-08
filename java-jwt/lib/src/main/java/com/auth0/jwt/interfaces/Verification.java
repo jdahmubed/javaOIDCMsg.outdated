@@ -3,6 +3,7 @@ package com.auth0.jwt.interfaces;
 import com.auth0.jwt.JWT;
 
 import java.util.Date;
+import java.util.List;
 
 public interface Verification {
     Verification withIssuer(String... issuer);
@@ -37,8 +38,8 @@ public interface Verification {
 
     Verification withArrayClaim(String name, Integer... items) throws IllegalArgumentException;
 
-    Verification createVerifierForGoogle(String picture, String email, String issuer,
-                                         String audience, Date exp, Date iat, String name);
+    Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
+                                         List<String> audience, Date exp, Date iat, String name);
 
     Verification withPicture(String picture);
 

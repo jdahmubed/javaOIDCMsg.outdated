@@ -108,9 +108,9 @@ public class JWT {
          * @param name
          * @return
          */
-        public Verification createVerifierForGoogle(String picture, String email, String issuer,
-                                                    String audience, Date exp, Date iat, String name) {
-            return withPicture(picture).withEmail(email).withIssuer(issuer).withAudience(audience);
+        public Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
+                                                    List<String> audience, Date exp, Date iat, String name) {
+            return withPicture(picture).withEmail(email).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
         }
 
         /**
@@ -529,18 +529,18 @@ public class JWT {
     }
 
     private void assertValidAudienceClaim(List<String> audience, List<String> value) {
-        if (audience == null || !audience.containsAll(value)) {
+        if (audience == null || !audience.containsAll(value) || audience.size() != value.size()) {
             throw new InvalidClaimException("The Claim 'aud' value doesn't contain the required audience.");
         }
     }
 
     private void assertValidIssuerClaim(List<String> issuer, List<String> value) {
-        if (issuer == null || !issuer.containsAll(value)) {
+        if (issuer == null || !issuer.containsAll(value) || issuer.size() != value.size()) {
             throw new InvalidClaimException("The Claim 'iss' value doesn't match the required one.");
         }
     }
     private void assertValidSubjectClaim(List<String> subject, List<String> value) {
-        if (subject == null || !subject.containsAll(value)) {
+        if (subject == null || !subject.containsAll(value) || subject.size() != value.size()) {
             throw new InvalidClaimException("The Claim 'sub' value doesn't match the required one.");
         }
     }
