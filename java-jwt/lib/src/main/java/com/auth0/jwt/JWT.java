@@ -3,10 +3,10 @@ package com.auth0.jwt;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.impl.PublicClaims;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.Clock;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
+import com.auth0.jwt.verification.VerificationAndAssertion;
 
 import java.util.*;
 
@@ -37,9 +37,9 @@ public class JWT {
      */
     public DecodedJWT decode(String token) throws JWTDecodeException {
         DecodedJWT jwt = new JWTDecoder(token);
-        verifyAlgorithm(jwt, algorithm);
+        VerificationAndAssertion.verifyAlgorithm(jwt, algorithm);
         algorithm.verify(jwt);
-        verifyClaims(jwt, claims);
+        VerificationAndAssertion.verifyClaims(clock, jwt, claims);
         return jwt;
     }
 
@@ -63,10 +63,7 @@ public class JWT {
         return JWTCreator.init();
     }
 
-
-
     //----------------this is from JWTVerifier--------
-
 
     /**
      * Initialize a Verification instance using the given Algorithm.
@@ -198,7 +195,7 @@ public class JWT {
          */
         @Override
         public Verification acceptLeeway(long leeway) throws IllegalArgumentException {
-            assertPositive(leeway);
+            VerificationAndAssertion.assertPositive(leeway);
             this.defaultLeeway = leeway;
             return this;
         }
@@ -213,7 +210,7 @@ public class JWT {
          */
         @Override
         public Verification acceptExpiresAt(long leeway) throws IllegalArgumentException {
-            assertPositive(leeway);
+            VerificationAndAssertion.assertPositive(leeway);
             requireClaim(PublicClaims.EXPIRES_AT, leeway);
             return this;
         }
@@ -228,7 +225,7 @@ public class JWT {
          */
         @Override
         public Verification acceptNotBefore(long leeway) throws IllegalArgumentException {
-            assertPositive(leeway);
+            VerificationAndAssertion.assertPositive(leeway);
             requireClaim(PublicClaims.NOT_BEFORE, leeway);
             return this;
         }
@@ -243,7 +240,7 @@ public class JWT {
          */
         @Override
         public Verification acceptIssuedAt(long leeway) throws IllegalArgumentException {
-            assertPositive(leeway);
+            VerificationAndAssertion.assertPositive(leeway);
             requireClaim(PublicClaims.ISSUED_AT, leeway);
             return this;
         }
@@ -270,7 +267,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, Boolean value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -285,7 +282,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, Integer value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -300,7 +297,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, Long value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -315,7 +312,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, Double value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -330,7 +327,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, String value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -345,7 +342,7 @@ public class JWT {
          */
         @Override
         public Verification withNonStandardClaim(String name, Date value) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, value);
             return this;
         }
@@ -360,7 +357,7 @@ public class JWT {
          */
         @Override
         public Verification withArrayClaim(String name, String... items) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, items);
             return this;
         }
@@ -375,7 +372,7 @@ public class JWT {
          */
         @Override
         public Verification withArrayClaim(String name, Integer... items) throws IllegalArgumentException {
-            assertNonNull(name);
+            VerificationAndAssertion.assertNonNull(name);
             requireClaim(name, items);
             return this;
         }
@@ -402,18 +399,6 @@ public class JWT {
             return new JWT(algorithm, claims, clock);
         }
 
-        private void assertPositive(long leeway) {
-            if (leeway < 0) {
-                throw new IllegalArgumentException("Leeway value can't be negative.");
-            }
-        }
-
-        private void assertNonNull(String name) {
-            if (name == null) {
-                throw new IllegalArgumentException("The Custom Claim's name can't be null.");
-            }
-        }
-
         private void addLeewayToDateClaims() {
             if (!claims.containsKey(PublicClaims.EXPIRES_AT)) {
                 claims.put(PublicClaims.EXPIRES_AT, defaultLeeway);
@@ -432,116 +417,6 @@ public class JWT {
                 return;
             }
             claims.put(name, value);
-        }
-    }
-
-    private void verifyAlgorithm(DecodedJWT jwt, Algorithm expectedAlgorithm) throws AlgorithmMismatchException {
-        if (!expectedAlgorithm.getName().equals(jwt.getAlgorithm())) {
-            throw new AlgorithmMismatchException("The provided Algorithm doesn't match the one defined in the JWT's Header.");
-        }
-    }
-
-    private void verifyClaims(DecodedJWT jwt, Map<String, Object> claims) throws TokenExpiredException, InvalidClaimException {
-        for (Map.Entry<String, Object> entry : claims.entrySet()) {
-            switch (entry.getKey()) {
-                case PublicClaims.AUDIENCE:
-                    //noinspection unchecked
-                    assertValidAudienceClaim(jwt.getAudience(), (List<String>) entry.getValue());
-                    break;
-                case PublicClaims.EXPIRES_AT:
-                    assertValidDateClaim(jwt.getExpiresAt(), (Long) entry.getValue(), true);
-                    break;
-                case PublicClaims.ISSUED_AT:
-                    assertValidDateClaim(jwt.getIssuedAt(), (Long) entry.getValue(), false);
-                    break;
-                case PublicClaims.NOT_BEFORE:
-                    assertValidDateClaim(jwt.getNotBefore(), (Long) entry.getValue(), false);
-                    break;
-                case PublicClaims.ISSUER:
-                    assertValidIssuerClaim(jwt.getIssuer(), (List<String>) entry.getValue());
-                    break;
-                case PublicClaims.JWT_ID:
-                    assertValidStringClaim(entry.getKey(), jwt.getId(), (String) entry.getValue());
-                    break;
-                case PublicClaims.SUBJECT:
-                    assertValidSubjectClaim(jwt.getSubject(), (List<String>) entry.getValue());
-                    break;
-                default:
-                    assertValidClaim(jwt.getClaim(entry.getKey()), entry.getKey(), entry.getValue());
-                    break;
-            }
-        }
-    }
-
-    private void assertValidClaim(Claim claim, String claimName, Object value) {
-        boolean isValid = false;
-        if (value instanceof String) {
-            isValid = value.equals(claim.asString());
-        } else if (value instanceof Integer) {
-            isValid = value.equals(claim.asInt());
-        } else if (value instanceof Long) {
-            isValid = value.equals(claim.asLong());
-        } else if (value instanceof Boolean) {
-            isValid = value.equals(claim.asBoolean());
-        } else if (value instanceof Double) {
-            isValid = value.equals(claim.asDouble());
-        } else if (value instanceof Date) {
-            isValid = value.equals(claim.asDate());
-        } else if (value instanceof Object[]) {
-            List<Object> claimArr = Arrays.asList(claim.as(Object[].class));
-            List<Object> valueArr = Arrays.asList((Object[]) value);
-            isValid = claimArr.containsAll(valueArr);
-        }
-
-        if (!isValid) {
-            throw new InvalidClaimException(String.format("The Claim '%s' value doesn't match the required one.", claimName));
-        }
-    }
-
-    private void assertValidStringClaim(String claimName, String value, String expectedValue) {
-        if (!expectedValue.equals(value)) {
-            throw new InvalidClaimException(String.format("The Claim '%s' value doesn't match the required one.", claimName));
-        }
-    }
-
-    private void assertValidDateClaim(Date date, long leeway, boolean shouldBeFuture) {
-        Date today = clock.getToday();
-        today.setTime((long) Math.floor((today.getTime() / 1000) * 1000)); // truncate millis
-        if (shouldBeFuture) {
-            assertDateIsFuture(date, leeway, today);
-        } else {
-            assertDateIsPast(date, leeway, today);
-        }
-    }
-
-    private void assertDateIsFuture(Date date, long leeway, Date today) {
-        today.setTime(today.getTime() - leeway * 1000);
-        if (date != null && today.after(date)) {
-            throw new TokenExpiredException(String.format("The Token has expired on %s.", date));
-        }
-    }
-
-    private void assertDateIsPast(Date date, long leeway, Date today) {
-        today.setTime(today.getTime() + leeway * 1000);
-        if (date != null && today.before(date)) {
-            throw new InvalidClaimException(String.format("The Token can't be used before %s.", date));
-        }
-    }
-
-    private void assertValidAudienceClaim(List<String> audience, List<String> value) {
-        if (audience == null || !audience.containsAll(value) || audience.size() != value.size()) {
-            throw new InvalidClaimException("The Claim 'aud' value doesn't contain the required audience.");
-        }
-    }
-
-    private void assertValidIssuerClaim(List<String> issuer, List<String> value) {
-        if (issuer == null || !issuer.containsAll(value) || issuer.size() != value.size()) {
-            throw new InvalidClaimException("The Claim 'iss' value doesn't match the required one.");
-        }
-    }
-    private void assertValidSubjectClaim(List<String> subject, List<String> value) {
-        if (subject == null || !subject.containsAll(value) || subject.size() != value.size()) {
-            throw new InvalidClaimException("The Claim 'sub' value doesn't match the required one.");
         }
     }
 }
