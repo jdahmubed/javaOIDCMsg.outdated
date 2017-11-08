@@ -5,9 +5,11 @@ import static com.auth0.jwt.GoogleJwtCreatorTest.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.impl.PublicClaims;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +17,8 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class MainTestSignatures {
 
@@ -32,8 +36,8 @@ public class MainTestSignatures {
                 .withAudience("audience")
                 .sign(null);
         Verification verification = JWT.require(null);
-        JWT verifier = verification.createVerifierForGoogle("picture", "email", asList("accounts.fake.com"), asList("audience"),
-                exp, iat, "name").build();
+        JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("accounts.fake.com"), asList("audience"),
+                exp, iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
     @Test
@@ -42,40 +46,53 @@ public class MainTestSignatures {
         thrown.expectMessage("Empty key");
         Algorithm algorithm = Algorithm.HMAC256("");
         String token = GoogleJwtCreator.build()
-                .withPicture("picture")
-                .withEmail("email")
+                .withPicture(GoogleJwtCreatorTest.PICTURE)
+                .withEmail(GoogleJwtCreatorTest.EMAIL)
                 .withIssuer("accounts.fake.com")
                 .withSubject("subject")
                 .withAudience("audience")
                 .withExp(exp)
                 .withIat(iat)
-                .withName("name")
+                .withName(GoogleJwtCreatorTest.NAME)
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle("picture", "email",asList("accounts.fake.com"), asList("audience"),
-                exp, iat, "name").build();
+        JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL,asList("accounts.fake.com"), asList("audience"),
+                exp, iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
     @Test
     public void testConfigurableToMultipleKeys() throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
-        String[] arr = {"accounts.fake.com", "subject"};
         String token = GoogleJwtCreator.build()
-                .withPicture("picture")
-                .withEmail("email")
+                .withPicture(GoogleJwtCreatorTest.PICTURE)
+                .withEmail(GoogleJwtCreatorTest.EMAIL)
                 .withSubject("subject", "subject2")
                 .withAudience("audience", "audience2")
                 .withExp(exp)
                 .withIat(iat)
-                .withName("name")
+                .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle("picture", "email", asList("issuer", "issuer2"), asList("audience", "audience2"),
-                new Date(2017,12,1), iat, "name").build();
+        JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience2"),
+                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String,Claim> claims = jwt.getClaims();
+        assertTrue(claims.get(GoogleJwtCreatorTest.PICTURE).asString().equals(GoogleJwtCreatorTest.PICTURE));
+        assertTrue(claims.get(GoogleJwtCreatorTest.EMAIL).asString().equals(GoogleJwtCreatorTest.EMAIL));
+        List<String> issuers = claims.get(PublicClaims.ISSUER).asList(String.class);
+        assertTrue(issuers.get(0).equals("issuer"));
+        assertTrue(issuers.get(1).equals("issuer2"));
+        List<String> subjects = claims.get(PublicClaims.SUBJECT).asList(String.class);
+        assertTrue(subjects.get(0).equals("subject"));
+        assertTrue(subjects.get(1).equals("subject2"));
+        List<String> audience = claims.get(PublicClaims.AUDIENCE).asList(String.class);
+        assertTrue(audience.get(0).equals("audience"));
+        assertTrue(audience.get(1).equals("audience2"));
+        assertTrue(claims.get(PublicClaims.EXPIRES_AT).asDate().toString().equals(exp.toString()));
+        assertTrue(claims.get(GoogleJwtCreatorTest.NAME).asString().equals(GoogleJwtCreatorTest.NAME));
     }
 
     @Test
@@ -86,18 +103,18 @@ public class MainTestSignatures {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String[] arr = {"accounts.fake.com", "subject"};
         String token = GoogleJwtCreator.build()
-                .withPicture("picture")
-                .withEmail("email")
+                .withPicture(GoogleJwtCreatorTest.PICTURE)
+                .withEmail(GoogleJwtCreatorTest.EMAIL)
                 .withSubject("subject", "subject2")
                 .withAudience("audience", "audience2")
                 .withExp(exp)
                 .withIat(iat)
-                .withName("name")
+                .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle("picture", "email", asList("issuer", "issuer2"), asList("audience"),
-                new Date(2017,12,1), iat, "name").build();
+        JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience"),
+                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -109,18 +126,18 @@ public class MainTestSignatures {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String[] arr = {"accounts.fake.com", "subject"};
         String token = GoogleJwtCreator.build()
-                .withPicture("picture")
-                .withEmail("email")
+                .withPicture(GoogleJwtCreatorTest.PICTURE)
+                .withEmail(GoogleJwtCreatorTest.EMAIL)
                 .withSubject("subject", "subject2")
                 .withAudience("audience", "audience2")
                 .withExp(exp)
                 .withIat(iat)
-                .withName("name")
+                .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
         Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle("picture", "email", asList("issuer", "issuer2"), asList("audience", "audience3"),
-                new Date(2017,12,1), iat, "name").build();
+        JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience3"),
+                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 }
