@@ -91,6 +91,7 @@ public final class JWTCreator {
 
         /**
          * Add a specific Issuer ("iss") claim to the Payload.
+         * Allows for multiple issuers
          *
          * @param issuer the Issuer value.
          * @return this same Builder instance.
@@ -102,6 +103,7 @@ public final class JWTCreator {
 
         /**
          * Add a specific Subject ("sub") claim to the Payload.
+         * Allows for multiple subjects
          *
          * @param subject the Subject value.
          * @return this same Builder instance.
@@ -113,6 +115,7 @@ public final class JWTCreator {
 
         /**
          * Add a specific Audience ("aud") claim to the Payload.
+         * Allows for multiple audience
          *
          * @param audience the Audience value.
          * @return this same Builder instance.
@@ -166,8 +169,15 @@ public final class JWTCreator {
             return this;
         }
 
-        public Builder setIsNoneAlgorithmAllowed(boolean isNoneAlgorithm) {
-            this.isNoneAlgorithmAllowed = isNoneAlgorithm;
+        /**
+         * Developer specifies whether they want to accept
+         * NONE algorithms or not.
+         *
+         * @param isNoneAlgorithmAllowed
+         * @return
+         */
+        public Builder setIsNoneAlgorithmAllowed(boolean isNoneAlgorithmAllowed) {
+            this.isNoneAlgorithmAllowed = isNoneAlgorithmAllowed;
             return this;
         }
 

@@ -113,18 +113,36 @@ public class JWT {
             return withPicture(picture).withEmail(email).withIssuer(issuer).withAudience(audience);
         }
 
+        /**
+         * Require a specific Picture ("picture") claim.
+         *
+         * @param picture the required Picture value
+         * @return this same Verification instance.
+         */
         @Override
         public Verification withPicture(String picture) {
             requireClaim("picture", picture);
             return this;
         }
 
+        /**
+         * Require a specific Email ("email") claim.
+         *
+         * @param email the required Email value
+         * @return this same Verification instance.
+         */
         @Override
         public Verification withEmail(String email) {
             requireClaim("email", email);
             return this;
         }
 
+        /**
+         * Require a specific Name ("name") claim.
+         *
+         * @param name the required Name value
+         * @return this same Verification instance.
+         */
         @Override
         public Verification withName(String name) {
             requireClaim("name", name);
@@ -133,6 +151,7 @@ public class JWT {
 
         /**
          * Require a specific Issuer ("iss") claim.
+         * Allows for multiple issuers
          *
          * @param issuer the required Issuer value
          * @return this same Verification instance.
@@ -145,6 +164,7 @@ public class JWT {
 
         /**
          * Require a specific Subject ("sub") claim.
+         * Allows for multiple subjects
          *
          * @param subject the required Subject value
          * @return this same Verification instance.
@@ -157,6 +177,7 @@ public class JWT {
 
         /**
          * Require a specific Audience ("aud") claim.
+         * Allows for multiple audience
          *
          * @param audience the required Audience value
          * @return this same Verification instance.
