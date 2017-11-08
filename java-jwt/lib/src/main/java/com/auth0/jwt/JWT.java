@@ -80,8 +80,8 @@ public class JWT {
      * The Verification class holds the Claims required by a JWT to be valid.
      */
     public static class BaseVerification implements Verification {
-        private final Algorithm algorithm;
-        private final Map<String, Object> claims;
+        protected final Algorithm algorithm;
+        protected final Map<String, Object> claims;
         private long defaultLeeway;
 
         BaseVerification(Algorithm algorithm) throws IllegalArgumentException {
@@ -92,58 +92,6 @@ public class JWT {
             this.algorithm = algorithm;
             this.claims = new HashMap<>();
             this.defaultLeeway = 0;
-        }
-
-        /**
-         * Create Verification object for verification purposes
-         * @param picture
-         * @param email
-         * @param issuer
-         * @param audience
-         * @param exp
-         * @param iat
-         * @param name
-         * @return
-         */
-        public Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
-                                                    List<String> audience, Date exp, Date iat, String name) {
-            return withPicture(picture).withEmail(email).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
-        }
-
-        /**
-         * Require a specific Picture ("picture") claim.
-         *
-         * @param picture the required Picture value
-         * @return this same Verification instance.
-         */
-        @Override
-        public Verification withPicture(String picture) {
-            requireClaim("picture", picture);
-            return this;
-        }
-
-        /**
-         * Require a specific Email ("email") claim.
-         *
-         * @param email the required Email value
-         * @return this same Verification instance.
-         */
-        @Override
-        public Verification withEmail(String email) {
-            requireClaim("email", email);
-            return this;
-        }
-
-        /**
-         * Require a specific Name ("name") claim.
-         *
-         * @param name the required Name value
-         * @return this same Verification instance.
-         */
-        @Override
-        public Verification withName(String name) {
-            requireClaim("name", name);
-            return this;
         }
 
         /**
@@ -399,7 +347,7 @@ public class JWT {
             return new JWT(algorithm, claims, clock);
         }
 
-        private void addLeewayToDateClaims() {
+        protected void addLeewayToDateClaims() {
             if (!claims.containsKey(PublicClaims.EXPIRES_AT)) {
                 claims.put(PublicClaims.EXPIRES_AT, defaultLeeway);
             }
@@ -411,7 +359,7 @@ public class JWT {
             }
         }
 
-        private void requireClaim(String name, Object value) {
+        protected void requireClaim(String name, Object value) {
             if (value == null) {
                 claims.remove(name);
                 return;

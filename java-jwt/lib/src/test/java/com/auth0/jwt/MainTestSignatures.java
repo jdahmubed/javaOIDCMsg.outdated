@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.GoogleVerification;
 import com.auth0.jwt.interfaces.Verification;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
@@ -35,11 +36,12 @@ public class MainTestSignatures {
         String token = JWT.create().withIssuer("accounts.fake.com").withSubject("subject")
                 .withAudience("audience")
                 .sign(null);
-        Verification verification = JWT.require(null);
+        GoogleVerification verification = GoogleJWT.require(null);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
+
     @Test
     public void testVerifyingWithEmptyKey() throws Exception {
         thrown.expect(IllegalArgumentException.class);
@@ -56,7 +58,7 @@ public class MainTestSignatures {
                 .withName(GoogleJwtCreatorTest.NAME)
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL,asList("accounts.fake.com"), asList("audience"),
                 exp, iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
@@ -75,7 +77,7 @@ public class MainTestSignatures {
                 .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience2"),
                 new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
@@ -112,7 +114,7 @@ public class MainTestSignatures {
                 .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience"),
                 new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
@@ -135,7 +137,7 @@ public class MainTestSignatures {
                 .withName(GoogleJwtCreatorTest.NAME)
                 .withIssuer("issuer", "issuer2")
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience3"),
                 new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);

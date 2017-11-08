@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.GoogleVerification;
 import com.auth0.jwt.interfaces.Verification;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
@@ -28,6 +29,7 @@ public class GoogleJwtCreatorTest {
     public static final String EMAIL = "email";
     public static final String NAME = "name";
 
+
     @Test
     public void testGoogleJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -41,7 +43,7 @@ public class GoogleJwtCreatorTest {
                 .withIat(iat)
                 .withName(NAME)
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
@@ -65,8 +67,8 @@ public class GoogleJwtCreatorTest {
                 .withName(NAME)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -89,8 +91,8 @@ public class GoogleJwtCreatorTest {
                 .setIsNoneAlgorithmAllowed(false)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -112,8 +114,8 @@ public class GoogleJwtCreatorTest {
                 .withName(NAME)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -133,8 +135,8 @@ public class GoogleJwtCreatorTest {
                 .setIsNoneAlgorithmAllowed(true)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
@@ -159,8 +161,8 @@ public class GoogleJwtCreatorTest {
                 .withName(NAME)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -182,8 +184,8 @@ public class GoogleJwtCreatorTest {
                 .withName(NAME)
                 .sign(algorithm);
 
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -202,8 +204,8 @@ public class GoogleJwtCreatorTest {
                 .withName(NAME)
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
@@ -216,8 +218,8 @@ public class GoogleJwtCreatorTest {
         String myDate = "2014/10/29";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date date = sdf.parse(myDate);
-        long exp = date.getTime();
-        Date expDate = new Date(exp);
+        long expLong = date.getTime();
+        Date expDate = new Date(expLong);
 
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String token = GoogleJwtCreator.build()
@@ -230,9 +232,9 @@ public class GoogleJwtCreatorTest {
                 .withIat(iat)
                 .withName(NAME)
                 .sign(algorithm);
-        Verification verification = JWT.require(algorithm);
-        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL,asList("accounts.fake.com"), asList("audience"),
-                expDate, iat, NAME).build();
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
