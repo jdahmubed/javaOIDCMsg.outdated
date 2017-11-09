@@ -35,7 +35,7 @@ public class MainTestSignatures {
                 .sign(null);
         GoogleVerification verification = GoogleJWT.require(null);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("accounts.fake.com"), asList("audience"),
-                exp, iat, GoogleJwtCreatorTest.NAME).build();
+                 GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -57,7 +57,7 @@ public class MainTestSignatures {
                 .sign(algorithm);
         GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL,asList("accounts.fake.com"), asList("audience"),
-                exp, iat, GoogleJwtCreatorTest.NAME).build();
+                 GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -76,7 +76,7 @@ public class MainTestSignatures {
                 .sign(algorithm);
         GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience2"),
-                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
+                GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String,Claim> claims = jwt.getClaims();
         assertTrue(claims.get(GoogleJwtCreatorTest.PICTURE).asString().equals(GoogleJwtCreatorTest.PICTURE));
@@ -113,7 +113,7 @@ public class MainTestSignatures {
                 .sign(algorithm);
         GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience"),
-                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
+                GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -136,7 +136,7 @@ public class MainTestSignatures {
                 .sign(algorithm);
         GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(GoogleJwtCreatorTest.PICTURE, GoogleJwtCreatorTest.EMAIL, asList("issuer", "issuer2"), asList("audience", "audience3"),
-                new Date(2017,12,1), iat, GoogleJwtCreatorTest.NAME).build();
+                GoogleJwtCreatorTest.NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 }

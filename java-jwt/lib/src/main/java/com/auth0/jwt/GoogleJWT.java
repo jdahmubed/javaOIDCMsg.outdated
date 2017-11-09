@@ -20,13 +20,11 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
      * @param email
      * @param issuer
      * @param audience
-     * @param exp
-     * @param iat
      * @param name
      * @return
      */
     public Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
-                                                List<String> audience, Date exp, Date iat, String name) {
+                                                List<String> audience, String name) {
         return withPicture(picture).withName(name).withEmail(email).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
     }
 
@@ -67,7 +65,7 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
     }
 
     @Override
-    public Verification createVerifierForExtended(String picture, String email, List<String> issuer, List<String> audience, Date exp, Date iat, String name, Date nbf) {
+    public Verification createVerifierForExtended(String picture, String email, List<String> issuer, List<String> audience, String name, Date nbf) {
         throw new UnsupportedOperationException("you shouldn't be calling this method");
     }
 
@@ -77,11 +75,6 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
 
     static GoogleVerification init(Algorithm algorithm) throws IllegalArgumentException {
         return new GoogleJWT(algorithm);
-    }
-
-    @Override
-    public Verification withNbf(Date nbf) {
-        throw new UnsupportedOperationException("you shouldn't be calling this method");
     }
 
     @Override

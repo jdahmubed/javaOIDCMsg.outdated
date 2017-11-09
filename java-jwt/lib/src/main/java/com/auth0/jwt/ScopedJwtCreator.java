@@ -10,20 +10,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The GoogleJwtCreator class holds the sign method to generate a complete Google JWT (with Signature) from a given Header and Payload content.
+ * The ScopedJwtCreator class holds the sign method to generate a complete Scoped JWT (with Signature) from a given Header and Payload content.
  */
-public class GoogleJwtCreator extends JWTCreator.Builder{
+public class ScopedJwtCreator extends JWTCreator.Builder{
 
     protected JWTCreator.Builder jwt;
     protected HashMap<String, Boolean> addedClaims;
     protected Set<String> publicClaims;
 
-    public GoogleJwtCreator() {
+    public ScopedJwtCreator() {
         jwt = JWT.create();
         addedClaims = new HashMap<String, Boolean>() {{
-            put("Name", false);
-            put("Email", false);
-            put("Picture", false);
+            put("Scope", false);
             put("Issuer", false);
             put("Subject", false);
             put("Audience", false);
@@ -41,40 +39,16 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
         }};
     }
 
-
     /**
-     * Add a specific Name ("name") claim to the Payload.
+     * Add a specific Scope ("scope") claim to the Payload.
+     * Allows for multiple issuers
      *
-     * @param name the Name value.
+     * @param scope the Scope value.
      * @return this same Builder instance.
      */
-    protected GoogleJwtCreator withName(String name) {
-        jwt.withNonStandardClaim("name", name);
-        addedClaims.put("Name", true);
-        return this;
-    }
-
-    /**
-     * Add a specific Email ("email") claim to the Payload.
-     *
-     * @param email the Email value.
-     * @return this same Builder instance.
-     */
-    GoogleJwtCreator withEmail(String email) {
-        jwt.withNonStandardClaim("email", email);
-        addedClaims.put("Email", true);
-        return this;
-    }
-
-    /**
-     * Add a specific Picture ("picture") claim to the Payload.
-     *
-     * @param picture the Picture value.
-     * @return this same Builder instance.
-     */
-    protected GoogleJwtCreator withPicture(String picture) {
-        jwt.withNonStandardClaim("picture", picture);
-        addedClaims.put("Picture", true);
+    public ScopedJwtCreator withScope(String scope) {
+        jwt.withNonStandardClaim("scope", scope);
+        addedClaims.put("Scope", true);
         return this;
     }
 
@@ -85,7 +59,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param issuer the Issuer value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withIssuer(String... issuer) {
+    public ScopedJwtCreator withIssuer(String... issuer) {
         jwt.withIssuer(issuer);
         addedClaims.put("Issuer", true);
         return this;
@@ -98,7 +72,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param subject the Subject value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withSubject(String... subject) {
+    public ScopedJwtCreator withSubject(String... subject) {
         jwt.withSubject(subject);
         addedClaims.put("Subject", true);
         return this;
@@ -111,7 +85,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param audience the Audience value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withAudience(String... audience) {
+    public ScopedJwtCreator withAudience(String... audience) {
         jwt.withAudience(audience);
         addedClaims.put("Audience", true);
         return this;
@@ -123,7 +97,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param iat the Issued At value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withIat(Date iat) {
+    public ScopedJwtCreator withIat(Date iat) {
         jwt.withIssuedAt(iat);
         addedClaims.put("Iat", true);
         return this;
@@ -135,7 +109,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param exp the Expires At value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withExp(Date exp) {
+    public ScopedJwtCreator withExp(Date exp) {
         jwt.withExpiresAt(exp);
         addedClaims.put("Exp", true);
         return this;
@@ -149,7 +123,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @return this same Verification instance.
      * @throws IllegalArgumentException if the name is null.
      */
-    public GoogleJwtCreator withNonStandardClaim(String name, String value) {
+    public ScopedJwtCreator withNonStandardClaim(String name, String value) {
         jwt.withNonStandardClaim(name, value);
         return this;
     }
@@ -162,7 +136,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @return this same Verification instance.
      * @throws IllegalArgumentException if the name is null.
      */
-    public GoogleJwtCreator withArrayClaim(String name, String... items) throws IllegalArgumentException {
+    public ScopedJwtCreator withArrayClaim(String name, String... items) throws IllegalArgumentException {
         jwt.withArrayClaim(name, items);
         if(publicClaims.contains(name))
             addedClaims.put(name, true);
@@ -176,7 +150,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param isNoneAlgorithmAllowed
      * @return
      */
-    public GoogleJwtCreator setIsNoneAlgorithmAllowed(boolean isNoneAlgorithmAllowed) {
+    public ScopedJwtCreator setIsNoneAlgorithmAllowed(boolean isNoneAlgorithmAllowed) {
         jwt.setIsNoneAlgorithmAllowed(isNoneAlgorithmAllowed);
         return this;
     }
@@ -209,7 +183,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
                 throw new Exception("Standard claim: " + claim + " has not been set");
     }
 
-    public static GoogleJwtCreator build() {
-        return new GoogleJwtCreator();
+    public static ScopedJwtCreator build() {
+        return new ScopedJwtCreator();
     }
 }
