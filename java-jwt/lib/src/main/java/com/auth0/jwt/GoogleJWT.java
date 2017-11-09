@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.Verification;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class GoogleJWT extends JWT.BaseVerification implements GoogleVerification{
 
@@ -67,12 +66,22 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
         return this;
     }
 
+    @Override
+    public Verification createVerifierForExtended(String picture, String email, List<String> issuer, List<String> audience, Date exp, Date iat, String name, Date nbf) {
+        throw new UnsupportedOperationException("you shouldn't be calling this method");
+    }
+
     public static GoogleVerification require(Algorithm algorithm) {
         return GoogleJWT.init(algorithm);
     }
 
     static GoogleVerification init(Algorithm algorithm) throws IllegalArgumentException {
         return new GoogleJWT(algorithm);
+    }
+
+    @Override
+    public Verification withNbf(Date nbf) {
+        throw new UnsupportedOperationException("you shouldn't be calling this method");
     }
 
     @Override

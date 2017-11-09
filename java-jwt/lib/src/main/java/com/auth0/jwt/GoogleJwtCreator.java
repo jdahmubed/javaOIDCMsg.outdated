@@ -14,14 +14,13 @@ import java.util.Set;
  */
 public class GoogleJwtCreator extends JWTCreator.Builder{
 
-    private JWTCreator.Builder jwt;
-    private HashMap<String, Boolean> addedClaims;
-    private Set<String> publicClaims;
+    protected JWTCreator.Builder jwt;
+    protected HashMap<String, Boolean> addedClaims;
+    protected Set<String> publicClaims;
 
     public GoogleJwtCreator() {
         jwt = JWT.create();
-        addedClaims = new HashMap<String, Boolean>()
-        {{
+        addedClaims = new HashMap<String, Boolean>() {{
             put("Name", false);
             put("Email", false);
             put("Picture", false);
@@ -31,8 +30,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
             put("Iat", false);
             put("Exp", false);
         }};
-        publicClaims = new HashSet<String>()
-        {{
+        publicClaims = new HashSet<String>() {{
             add(PublicClaims.ISSUER);
             add(PublicClaims.SUBJECT);
             add(PublicClaims.EXPIRES_AT);
@@ -43,13 +41,14 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
         }};
     }
 
+
     /**
      * Add a specific Name ("name") claim to the Payload.
      *
      * @param name the Name value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withName(String name) {
+    protected GoogleJwtCreator withName(String name) {
         jwt.withNonStandardClaim("name", name);
         addedClaims.put("Name", true);
         return this;
@@ -61,7 +60,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param email the Email value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withEmail(String email) {
+    protected GoogleJwtCreator withEmail(String email) {
         jwt.withNonStandardClaim("email", email);
         addedClaims.put("Email", true);
         return this;
@@ -73,7 +72,7 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
      * @param picture the Picture value.
      * @return this same Builder instance.
      */
-    public GoogleJwtCreator withPicture(String picture) {
+    protected GoogleJwtCreator withPicture(String picture) {
         jwt.withNonStandardClaim("picture", picture);
         addedClaims.put("Picture", true);
         return this;

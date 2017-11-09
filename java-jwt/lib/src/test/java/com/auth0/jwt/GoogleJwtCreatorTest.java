@@ -7,14 +7,12 @@ import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.GoogleVerification;
-import com.auth0.jwt.interfaces.Verification;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertThat;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,7 +46,7 @@ public class GoogleJwtCreatorTest {
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
-        verifyClaims(claims);
+        verifyClaims(claims, exp);
     }
 
     @Test
@@ -140,7 +138,7 @@ public class GoogleJwtCreatorTest {
                 exp, iat, NAME).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
-        verifyClaims(claims);
+        verifyClaims(claims, exp);
     }
 
     @Test
@@ -257,7 +255,7 @@ public class GoogleJwtCreatorTest {
         return start + (int)Math.round(Math.random() * (end - start));
     }
 
-    private static void verifyClaims(Map<String,Claim> claims) {
+    protected static void verifyClaims(Map<String,Claim> claims, Date exp) {
         assertTrue(claims.get(PICTURE).asString().equals(PICTURE));
         assertTrue(claims.get(EMAIL).asString().equals(EMAIL));
         assertTrue(claims.get(PublicClaims.ISSUER).asList(String.class).get(0).equals("accounts.fake.com"));

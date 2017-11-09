@@ -94,6 +94,11 @@ public class JWT {
             this.defaultLeeway = 0;
         }
 
+        @Override
+        public Verification withNbf(Date nbf) {
+            throw new UnsupportedOperationException("you shouldn't be calling this method");
+        }
+
         /**
          * Require a specific Issuer ("iss") claim.
          * Allows for multiple issuers

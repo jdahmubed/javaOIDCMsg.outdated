@@ -13,4 +13,8 @@ public interface GoogleVerification extends Verification{
     Verification withEmail(String email);
 
     GoogleVerification withName(String name);
+
+    Verification createVerifierForExtended(String picture, String email, List<String> issuer,
+                                           List<String> audience, Date exp, Date iat, String name, Date nbf);
+
 }
