@@ -109,6 +109,21 @@ public class JWT {
             throw new UnsupportedOperationException("you shouldn't be calling this method");
         }
 
+        @Override
+        public Verification createVerifierForFb(String userId, String appId) {
+            throw new UnsupportedOperationException("you shouldn't be calling this method");
+        }
+
+        @Override
+        public Verification withUserId(String userId) {
+            throw new UnsupportedOperationException("you shouldn't be calling this method");
+        }
+
+        @Override
+        public Verification withAppId(String appId) {
+            throw new UnsupportedOperationException("you shouldn't be calling this method");
+        }
+
         /**
          * Require a specific Issuer ("iss") claim.
          * Allows for multiple issuers
@@ -158,6 +173,7 @@ public class JWT {
          */
         @Override
         public Verification acceptLeeway(long leeway) throws IllegalArgumentException {
+            VerificationAndAssertion.assertPositive(leeway);
             VerificationAndAssertion.assertPositive(leeway);
             this.defaultLeeway = leeway;
             return this;

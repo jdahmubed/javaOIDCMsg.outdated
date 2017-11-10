@@ -4,24 +4,42 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Clock;
 import com.auth0.jwt.interfaces.Verification;
 
-import java.util.List;
+public class FbJWT extends JWT.BaseVerification implements Verification{
 
-public class ImplicitJWT extends JWT.BaseVerification implements Verification{
-
-    ImplicitJWT(Algorithm algorithm) throws IllegalArgumentException {
+    FbJWT(Algorithm algorithm) throws IllegalArgumentException {
         super(algorithm);
     }
 
     /**
      * Create Verification object for verification purposes
-     * @issuer scope
-     * @param issuer
-     * @param audience
+     * @param userId
+     * @param appId
      * @return
      */
-    public Verification createVerifierForImplicit(List<String> issuer,
-                                                List<String> audience) {
-        return withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
+    public Verification createVerifierForFb(String userId, String appId) {
+        return withUserId(userId).withAppId(appId);
+    }
+
+    /**
+     * Require a specific userId ("userId") claim.
+     *
+     * @param userId the required userId value
+     * @return this same Verification instance.
+     */
+    public Verification withUserId(String userId) {
+        requireClaim("userId", userId);
+        return this;
+    }
+
+    /**
+     * Require a specific appId ("appId") claim.
+     *
+     * @param appId the required appId value
+     * @return this same Verification instance.
+     */
+    public Verification withAppId(String appId) {
+        requireClaim("appId", appId);
+        return this;
     }
 
     /**
@@ -32,18 +50,18 @@ public class ImplicitJWT extends JWT.BaseVerification implements Verification{
      * @throws IllegalArgumentException if the provided algorithm is null.
      */
     public static Verification require(Algorithm algorithm) {
-        return ImplicitJWT.init(algorithm);
+        return FbJWT.init(algorithm);
     }
 
     /**
      * Initialize a Verification instance using the given Algorithm.
      *
      * @param algorithm the Algorithm to use on the JWT verification.
-     * @return a ImplicitJWT instance to configure.
+     * @return a FbJWT instance to configure.
      * @throws IllegalArgumentException if the provided algorithm is null.
      */
     static Verification init(Algorithm algorithm) throws IllegalArgumentException {
-        return new ImplicitJWT(algorithm);
+        return new FbJWT(algorithm);
     }
 
     /**

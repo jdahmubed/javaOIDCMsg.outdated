@@ -1,20 +1,14 @@
 package com.auth0.jwt;
 
-import static com.auth0.jwt.GoogleJwtCreatorTest.EMAIL;
-import static com.auth0.jwt.GoogleJwtCreatorTest.NAME;
-import static com.auth0.jwt.GoogleJwtCreatorTest.PICTURE;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.GoogleVerification;
 import com.auth0.jwt.interfaces.Verification;
 import com.auth0.jwt.verification.VerificationAndAssertion;
 import static java.util.Arrays.asList;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.util.Date;
 
 public class VerificationAndAssertionTest {
 

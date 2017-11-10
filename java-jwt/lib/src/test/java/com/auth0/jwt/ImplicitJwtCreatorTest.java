@@ -2,6 +2,8 @@ package com.auth0.jwt;
 
 import static com.auth0.jwt.TimeUtil.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.InvalidClaimException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -12,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ImplicitJwtCreatorTest {
@@ -22,7 +25,7 @@ public class ImplicitJwtCreatorTest {
 
 
     @Test
-    public void testGoogleJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
+    public void testImplicitJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String token = ImplicitJwtCreator.build()
                 .withIssuer("accounts.fake.com")
@@ -38,7 +41,43 @@ public class ImplicitJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorIssuerNotProvided() throws Exception {
+    public void testImplicitJwtCreatorInvalidIssuer() throws Exception {
+        thrown.expect(InvalidClaimException.class);
+        thrown.expectMessage("The Claim 'iss' value doesn't match the required one.");
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ImplicitJwtCreator.build()
+                .withIssuer("invalid")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ImplicitJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
+    }
+
+    @Test
+    public void testImplicitJwtCreatorInvalidAudience() throws Exception {
+        thrown.expect(InvalidClaimException.class);
+        thrown.expectMessage("The Claim 'aud' value doesn't contain the required audience.");
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ImplicitJwtCreator.build()
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("invalid")
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ImplicitJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
+    }
+
+    @Test
+    public void testImplicitJwtCreatorIssuerNotProvided() throws Exception {
         thrown.expect(Exception.class);
         thrown.expectMessage("Standard claim: Issuer has not been set");
         Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -55,7 +94,7 @@ public class ImplicitJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorNoneAlgorithmNotAllowed() throws Exception {
+    public void testImplicitJwtCreatorNoneAlgorithmNotAllowed() throws Exception {
         thrown.expect(IllegalAccessException.class);
         thrown.expectMessage("None algorithm isn't allowed");
 
@@ -74,7 +113,7 @@ public class ImplicitJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorNoneAlgorithmNotSpecifiedButStillNotAllowed() throws Exception {
+    public void testImplicitJwtCreatorNoneAlgorithmNotSpecifiedButStillNotAllowed() throws Exception {
         thrown.expect(IllegalAccessException.class);
         thrown.expectMessage("None algorithm isn't allowed");
 
@@ -91,7 +130,7 @@ public class ImplicitJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorNoneAlgorithmAllowed() throws Exception {
+    public void testImplicitJwtCreatorNoneAlgorithmAllowed() throws Exception {
         Algorithm algorithm = Algorithm.none();
         String token = ImplicitJwtCreator.build()
                 .withIssuer("accounts.fake.com")
@@ -99,6 +138,23 @@ public class ImplicitJwtCreatorTest {
                 .withAudience("audience")
                 .setIsNoneAlgorithmAllowed(true)
                 .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ImplicitJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
+    }
+
+    @Test
+    public void testImplicitJwtCreatorArrayClaim() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ImplicitJwtCreator.build()
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withIat(TimeUtil.generateRandomIatDateInPast())
+                .withArrayClaim("arrayKey", "arrayValue1", "arrayValue2")
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
@@ -120,6 +176,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     @Test
@@ -135,6 +193,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     @Test
@@ -150,6 +210,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     @Test
@@ -165,6 +227,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     @Test
@@ -180,6 +244,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     @Test
@@ -195,6 +261,8 @@ public class ImplicitJwtCreatorTest {
         Verification verification = ImplicitJWT.require(algorithm);
         JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
         DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims);
     }
 
     private static void verifyClaims(Map<String,Claim> claims) {

@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * The GoogleJwtCreator class holds the sign method to generate a complete Google JWT (with Signature) from a given Header and Payload content.
  */
-public class GoogleJwtCreator extends JWTCreator.Builder{
+public class GoogleJwtCreator {
 
     protected JWTCreator.Builder jwt;
     protected HashMap<String, Boolean> addedClaims;

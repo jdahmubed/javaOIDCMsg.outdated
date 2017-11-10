@@ -46,5 +46,11 @@ public interface Verification {
     Verification createVerifierForImplicit(List<String> issuer,
                                            List<String> audience);
 
+    Verification createVerifierForFb(String userId, String appId);
+
+    Verification withUserId(String userId);
+
+    Verification withAppId(String appId);
+
     JWT build();
 }
