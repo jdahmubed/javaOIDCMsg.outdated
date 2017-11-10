@@ -28,7 +28,6 @@ public class VerificationAndAssertion {
         }
     }
 
-
     public static void verifyAlgorithm(DecodedJWT jwt, Algorithm expectedAlgorithm) throws AlgorithmMismatchException {
         if (!expectedAlgorithm.getName().equals(jwt.getAlgorithm())) {
             throw new AlgorithmMismatchException("The provided Algorithm doesn't match the one defined in the JWT's Header.");
@@ -59,9 +58,6 @@ public class VerificationAndAssertion {
                     break;
                 case PublicClaims.JWT_ID:
                     VerificationAndAssertion.assertValidStringClaim(entry.getKey(), jwt.getId(), (String) entry.getValue());
-                    break;
-                case PublicClaims.SUBJECT:
-                    VerificationAndAssertion.assertValidSubjectClaim(jwt.getSubject(), (List<String>) entry.getValue());
                     break;
                 default:
                     VerificationAndAssertion.assertValidClaim(jwt.getClaim(entry.getKey()), entry.getKey(), entry.getValue());
@@ -134,12 +130,6 @@ public class VerificationAndAssertion {
     private static void assertValidIssuerClaim(List<String> issuer, List<String> value) {
         if (issuer == null || !issuer.containsAll(value) || issuer.size() != value.size()) {
             throw new InvalidClaimException("The Claim 'iss' value doesn't match the required one.");
-        }
-    }
-
-    private static void assertValidSubjectClaim(List<String> subject, List<String> value) {
-        if (subject == null || !subject.containsAll(value) || subject.size() != value.size()) {
-            throw new InvalidClaimException("The Claim 'sub' value doesn't match the required one.");
         }
     }
 }

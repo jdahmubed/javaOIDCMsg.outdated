@@ -155,6 +155,71 @@ public class GoogleJwtCreator extends JWTCreator.Builder{
     }
 
     /**
+     * Add a custom Claim value.
+     *
+     * @param name  the Claim's name.
+     * @param value the Claim's value.
+     * @return this same Builder instance.
+     * @throws IllegalArgumentException if the name is null.
+     */
+    public GoogleJwtCreator withNonStandardClaim(String name, Boolean value) throws IllegalArgumentException {
+        jwt.withNonStandardClaim(name, value);
+        return this;
+    }
+
+    /**
+     * Add a custom Claim value.
+     *
+     * @param name  the Claim's name.
+     * @param value the Claim's value.
+     * @return this same Builder instance.
+     * @throws IllegalArgumentException if the name is null.
+     */
+    public GoogleJwtCreator withNonStandardClaim(String name, Integer value) throws IllegalArgumentException {
+        jwt.withNonStandardClaim(name, value);
+        return this;
+    }
+
+    /**
+     * Add a custom Claim value.
+     *
+     * @param name  the Claim's name.
+     * @param value the Claim's value.
+     * @return this same Builder instance.
+     * @throws IllegalArgumentException if the name is null.
+     */
+    public GoogleJwtCreator withNonStandardClaim(String name, Long value) throws IllegalArgumentException {
+        jwt.withNonStandardClaim(name, value);
+        return this;
+    }
+
+    /**
+     * Add a custom Claim value.
+     *
+     * @param name  the Claim's name.
+     * @param value the Claim's value.
+     * @return this same Builder instance.
+     * @throws IllegalArgumentException if the name is null.
+     */
+    public GoogleJwtCreator withNonStandardClaim(String name, Double value) throws IllegalArgumentException {
+        jwt.withNonStandardClaim(name, value);
+        return this;
+    }
+
+    /**
+     * Add a custom Claim value.
+     *
+     * @param name  the Claim's name.
+     * @param value the Claim's value.
+     * @return this same Builder instance.
+     * @throws IllegalArgumentException if the name is null.
+     */
+    public GoogleJwtCreator withNonStandardClaim(String name, Date value) throws IllegalArgumentException {
+        jwt.withNonStandardClaim(name, value);
+        return this;
+    }
+
+    /**
      * Require a specific Array Claim to contain at least the given items.
      *
      * @param name  the Claim's name.

@@ -40,5 +40,4 @@ public class ExtendedJWT extends GoogleJWT implements GoogleVerification{
         return this;
     }
 
-
 }

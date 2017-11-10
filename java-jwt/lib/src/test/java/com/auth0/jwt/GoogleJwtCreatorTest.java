@@ -1,5 +1,7 @@
 package com.auth0.jwt;
 
+import static com.auth0.jwt.TimeUtil.generateRandomExpDateInFuture;
+import static com.auth0.jwt.TimeUtil.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -189,7 +191,7 @@ public class GoogleJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorNonStandardClaim() throws Exception {
+    public void testGoogleJwtCreatorNonStandardClaimString() throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String token = GoogleJwtCreator.build()
                 .withPicture(PICTURE)
@@ -205,6 +207,106 @@ public class GoogleJwtCreatorTest {
         GoogleVerification verification = GoogleJWT.require(algorithm);
         JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                  NAME).build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorNonStandardClaimBoolean() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture(PICTURE)
+                .withEmail(EMAIL)
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .withName(NAME)
+                .withNonStandardClaim("nonStandardClaim", true)
+                .sign(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                NAME).build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorNonStandardClaimInteger() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture(PICTURE)
+                .withEmail(EMAIL)
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .withName(NAME)
+                .withNonStandardClaim("nonStandardClaim", 999)
+                .sign(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                NAME).build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorNonStandardClaimLong() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture(PICTURE)
+                .withEmail(EMAIL)
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .withName(NAME)
+                .withNonStandardClaim("nonStandardClaim", 999L)
+                .sign(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                NAME).build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorNonStandardClaimDouble() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture(PICTURE)
+                .withEmail(EMAIL)
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .withName(NAME)
+                .withNonStandardClaim("nonStandardClaim", 9.99)
+                .sign(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                NAME).build();
+        DecodedJWT jwt = verifier.decode(token);
+    }
+
+    @Test
+    public void testGoogleJwtCreatorNonStandardClaimDate() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = GoogleJwtCreator.build()
+                .withPicture(PICTURE)
+                .withEmail(EMAIL)
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .withName(NAME)
+                .withNonStandardClaim("nonStandardClaim", new Date())
+                .sign(algorithm);
+        GoogleVerification verification = GoogleJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
+                NAME).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -234,25 +336,6 @@ public class GoogleJwtCreatorTest {
         JWT verifier = verification.createVerifierForGoogle(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
                 NAME).build();
         DecodedJWT jwt = verifier.decode(token);
-    }
-
-    public static Date generateRandomExpDateInFuture() {
-        Random rnd = new Random();
-        return new Date(Math.abs(System.currentTimeMillis() + rnd.nextLong()));
-    }
-
-    public static Date generateRandomIatDateInPast() {
-        GregorianCalendar gc = new GregorianCalendar();
-        int year = randBetween(1900, 2010);
-        gc.set(gc.YEAR, year);
-        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-        gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
-        return new Date(gc.getTimeInMillis());
-    }
-
-    public static int randBetween(int start, int end) {
-        return start + (int)Math.round(Math.random() * (end - start));
     }
 
     protected static void verifyClaims(Map<String,Claim> claims, Date exp) {

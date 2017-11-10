@@ -43,5 +43,8 @@ public interface Verification {
     Verification createVerifierForScoped(String scope, List<String> issuer,
                                          List<String> audience);
 
+    Verification createVerifierForImplicit(List<String> issuer,
+                                           List<String> audience);
+
     JWT build();
 }

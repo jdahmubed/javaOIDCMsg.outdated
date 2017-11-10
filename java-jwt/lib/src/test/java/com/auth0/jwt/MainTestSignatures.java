@@ -1,7 +1,7 @@
 package com.auth0.jwt;
 
-import static com.auth0.jwt.GoogleJwtCreatorTest.generateRandomExpDateInFuture;
-import static com.auth0.jwt.GoogleJwtCreatorTest.generateRandomIatDateInPast;
+import static com.auth0.jwt.TimeUtil.generateRandomExpDateInFuture;
+import static com.auth0.jwt.TimeUtil.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.impl.PublicClaims;

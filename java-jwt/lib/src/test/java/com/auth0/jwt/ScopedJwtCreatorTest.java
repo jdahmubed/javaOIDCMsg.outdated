@@ -1,5 +1,7 @@
 package com.auth0.jwt;
 
+import static com.auth0.jwt.TimeUtil.generateRandomExpDateInFuture;
+import static com.auth0.jwt.TimeUtil.generateRandomIatDateInPast;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
@@ -19,13 +21,10 @@ public class ScopedJwtCreatorTest {
     public ExpectedException thrown = ExpectedException.none();
     private static final Date exp = generateRandomExpDateInFuture();
     private static final Date iat = generateRandomIatDateInPast();
-    public static final String PICTURE = "picture";
-    public static final String EMAIL = "email";
-    public static final String NAME = "name";
 
 
     @Test
-    public void testGoogleJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
+    public void testScopedJwtCreatorAllStandardClaimsMustBeRequired() throws Exception {
         Algorithm algorithm = Algorithm.HMAC256("secret");
         String token = ScopedJwtCreator.build()
                 .withScope("scope")
@@ -43,7 +42,7 @@ public class ScopedJwtCreatorTest {
     }
 
     @Test
-    public void testGoogleJwtCreatorScopeNotProvided() throws Exception {
+    public void testScopedJwtCreatorScopeNotProvided() throws Exception {
         thrown.expect(Exception.class);
         thrown.expectMessage("Standard claim: Scope has not been set");
         Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -61,26 +60,181 @@ public class ScopedJwtCreatorTest {
         verifyClaims(claims, exp);
     }
 
-    public static Date generateRandomExpDateInFuture() {
-        Random rnd = new Random();
-        return new Date(Math.abs(System.currentTimeMillis() + rnd.nextLong()));
+    @Test
+    public void testScopedJwtCreatorNoneAlgorithmNotAllowed() throws Exception {
+        thrown.expect(IllegalAccessException.class);
+        thrown.expectMessage("None algorithm isn't allowed");
+
+        Algorithm algorithm = Algorithm.none();
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .setIsNoneAlgorithmAllowed(false)
+                .sign(algorithm);
+
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
     }
 
-    public static Date generateRandomIatDateInPast() {
-        GregorianCalendar gc = new GregorianCalendar();
-        int year = randBetween(1900, 2010);
-        gc.set(gc.YEAR, year);
-        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-        gc.set(gc.DAY_OF_YEAR, dayOfYear);
+    @Test
+    public void testScopedJwtCreatorNoneAlgorithmNotSpecifiedButStillNotAllowed() throws Exception {
+        thrown.expect(IllegalAccessException.class);
+        thrown.expectMessage("None algorithm isn't allowed");
 
-        return new Date(gc.getTimeInMillis());
+        Algorithm algorithm = Algorithm.none();
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
     }
 
-    public static int randBetween(int start, int end) {
-        return start + (int)Math.round(Math.random() * (end - start));
+    @Test
+    public void testScopedJwtCreatorNoneAlgorithmAllowed() throws Exception {
+        Algorithm algorithm = Algorithm.none();
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .setIsNoneAlgorithmAllowed(true)
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
     }
 
-    protected static void verifyClaims(Map<String,Claim> claims, Date exp) {
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimStringValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimIntegerValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", 999)
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimDoubleValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", 9.99)
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimLongValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", 9.99)
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimBooleanValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", true)
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    @Test
+    public void testScopedJwtCreatorNonStandardClaimDateValue() throws Exception {
+        Algorithm algorithm = Algorithm.HMAC256("secret");
+        String token = ScopedJwtCreator.build()
+                .withScope("scope")
+                .withIssuer("accounts.fake.com")
+                .withSubject("subject")
+                .withAudience("audience")
+                .withNonStandardClaim("nonStandardClaim", new Date())
+                .withExp(exp)
+                .withIat(iat)
+                .sign(algorithm);
+        Verification verification = ScopedJWT.require(algorithm);
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        DecodedJWT jwt = verifier.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+        verifyClaims(claims, exp);
+    }
+
+    private static void verifyClaims(Map<String,Claim> claims, Date exp) {
         assertTrue(claims.get(PublicClaims.ISSUER).asList(String.class).get(0).equals("accounts.fake.com"));
         assertTrue(claims.get(PublicClaims.SUBJECT).asList(String.class).get(0).equals("subject"));
         assertTrue(claims.get(PublicClaims.AUDIENCE).asString().equals("audience"));
