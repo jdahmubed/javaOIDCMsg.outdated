@@ -15,9 +15,9 @@ public class ExtendedJWT extends GoogleJWT implements GoogleVerification{
 
 
     public Verification createVerifierForExtended(String picture, String email, List<String> issuer,
-                                                List<String> audience, String name, Date nbf) {
-        Verification verification = createVerifierForGoogle(picture, email, issuer, audience, name);
-        return verification.withNbf(nbf);
+                                                List<String> audience, String name, long nbf, long expLeeway, long iatLeeway) {
+        Verification verification = createVerifierForGoogle(picture, email, issuer, audience, name, expLeeway, iatLeeway);
+        return verification.acceptNotBefore(nbf);
     }
 
     public static GoogleVerification require(Algorithm algorithm) {

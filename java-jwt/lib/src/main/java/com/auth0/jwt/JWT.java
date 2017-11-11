@@ -100,12 +100,12 @@ public class JWT {
         }
 
         @Override
-        public Verification createVerifierForScoped(String scope, List<String> issuer, List<String> audience) {
+        public Verification createVerifierForScoped(String scope, List<String> issuer, List<String> audience, long expLeeway, long iatLeeway) {
             throw new UnsupportedOperationException("you shouldn't be calling this method");
         }
 
         @Override
-        public Verification createVerifierForImplicit(List<String> issuer, List<String> audience) {
+        public Verification createVerifierForImplicit(List<String> issuer, List<String> audience, long iatLeeway) {
             throw new UnsupportedOperationException("you shouldn't be calling this method");
         }
 
@@ -173,7 +173,6 @@ public class JWT {
          */
         @Override
         public Verification acceptLeeway(long leeway) throws IllegalArgumentException {
-            VerificationAndAssertion.assertPositive(leeway);
             VerificationAndAssertion.assertPositive(leeway);
             this.defaultLeeway = leeway;
             return this;

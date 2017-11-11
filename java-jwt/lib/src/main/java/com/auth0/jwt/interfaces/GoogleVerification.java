@@ -6,7 +6,7 @@ import java.util.List;
 public interface GoogleVerification extends Verification{
 
     Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
-                                         List<String> audience, String name);
+                                         List<String> audience, String name, long expLeeway, long iatLeeway);
 
     Verification withPicture(String picture);
 
@@ -15,6 +15,6 @@ public interface GoogleVerification extends Verification{
     GoogleVerification withName(String name);
 
      Verification createVerifierForExtended(String picture, String email, List<String> issuer,
-                                           List<String> audience, String name, Date nbf);
+                                           List<String> audience, String name, long nbf, long expLeeway, long iatLeeway);
 
 }

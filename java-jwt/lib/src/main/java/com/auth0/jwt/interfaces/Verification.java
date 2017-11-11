@@ -41,10 +41,10 @@ public interface Verification {
     Verification withNbf(Date nbf);
 
     Verification createVerifierForScoped(String scope, List<String> issuer,
-                                         List<String> audience);
+                                         List<String> audience, long expLeeway, long iatLeeway);
 
     Verification createVerifierForImplicit(List<String> issuer,
-                                           List<String> audience);
+                                           List<String> audience, long iatLeeway);
 
     Verification createVerifierForFb(String userId, String appId);
 

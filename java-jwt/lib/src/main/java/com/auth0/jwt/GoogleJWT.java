@@ -24,8 +24,9 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
      * @return
      */
     public Verification createVerifierForGoogle(String picture, String email, List<String> issuer,
-                                                List<String> audience, String name) {
-        return withPicture(picture).withName(name).withEmail(email).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
+                                                List<String> audience, String name, long expLeeway, long iatLeeway) {
+        return withPicture(picture).withName(name).withEmail(email).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]))
+                .acceptExpiresAt(expLeeway).acceptIssuedAt(iatLeeway);
     }
 
     /**
@@ -65,7 +66,7 @@ public class GoogleJWT extends JWT.BaseVerification implements GoogleVerificatio
     }
 
     @Override
-    public Verification createVerifierForExtended(String picture, String email, List<String> issuer, List<String> audience, String name, Date nbf) {
+    public Verification createVerifierForExtended(String picture, String email, List<String> issuer, List<String> audience, String name, long nbf, long expLeeway, long iatLeeway) {
         throw new UnsupportedOperationException("you shouldn't be calling this method");
     }
 

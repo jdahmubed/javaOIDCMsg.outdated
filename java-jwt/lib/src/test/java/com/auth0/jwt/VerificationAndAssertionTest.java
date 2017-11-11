@@ -43,7 +43,7 @@ public class VerificationAndAssertionTest {
                 .withIat(TimeUtil.generateRandomIatDateInPast())
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(Algorithm.none());
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 

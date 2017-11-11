@@ -14,7 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ImplicitJwtCreatorTest {
@@ -34,7 +33,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -52,7 +51,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -70,7 +69,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -87,7 +86,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -108,7 +107,7 @@ public class ImplicitJwtCreatorTest {
                 .sign(algorithm);
 
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -125,7 +124,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -140,7 +139,7 @@ public class ImplicitJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -157,7 +156,7 @@ public class ImplicitJwtCreatorTest {
                 .withArrayClaim("arrayKey", "arrayValue1", "arrayValue2")
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -174,7 +173,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", "nonStandardClaimValue")
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -191,7 +190,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", 999)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -208,7 +207,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", 999L)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -225,7 +224,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", 9.99)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -242,7 +241,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", true)
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);
@@ -259,7 +258,7 @@ public class ImplicitJwtCreatorTest {
                 .withNonStandardClaim("nonStandardClaim", new Date())
                 .sign(algorithm);
         Verification verification = ImplicitJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForImplicit(asList("accounts.fake.com"), asList("audience"), 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims);

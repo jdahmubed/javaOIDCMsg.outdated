@@ -38,7 +38,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -58,7 +58,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -76,7 +76,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -94,7 +94,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -111,7 +111,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -134,7 +134,7 @@ public class ScopedJwtCreatorTest {
                 .sign(algorithm);
 
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -154,7 +154,7 @@ public class ScopedJwtCreatorTest {
                 .sign(algorithm);
 
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -171,7 +171,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -190,7 +190,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -209,7 +209,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -228,7 +228,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -247,7 +247,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -266,7 +266,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -285,7 +285,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -304,7 +304,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -332,7 +332,7 @@ public class ScopedJwtCreatorTest {
                 .withIat(iat)
                 .sign(algorithm);
         Verification verification = ScopedJWT.require(algorithm);
-        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience")).build();
+        JWT verifier = verification.createVerifierForScoped("scope", asList("accounts.fake.com"), asList("audience"), 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);

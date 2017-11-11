@@ -42,7 +42,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -66,7 +66,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -88,7 +88,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -110,7 +110,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -134,7 +134,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -158,7 +158,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -181,7 +181,7 @@ public class ExtendedJwtCreatorTest {
                 .sign(algorithm);
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -208,7 +208,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -233,7 +233,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -255,7 +255,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
         Map<String, Claim> claims = jwt.getClaims();
         verifyClaims(claims, exp);
@@ -279,7 +279,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -301,7 +301,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -323,7 +323,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -345,7 +345,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -367,7 +367,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -389,7 +389,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 
@@ -420,7 +420,7 @@ public class ExtendedJwtCreatorTest {
 
         GoogleVerification verification = ExtendedJWT.require(algorithm);
         JWT verifier = verification.createVerifierForExtended(PICTURE, EMAIL, asList("accounts.fake.com"), asList("audience"),
-                NAME, new Date(1477592000)).build();
+                NAME, 1, 1, 1).build();
         DecodedJWT jwt = verifier.decode(token);
     }
 }

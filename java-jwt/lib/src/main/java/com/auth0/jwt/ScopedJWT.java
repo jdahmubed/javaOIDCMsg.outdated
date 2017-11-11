@@ -20,8 +20,13 @@ public class ScopedJWT extends JWT.BaseVerification implements Verification{
      * @return
      */
     public Verification createVerifierForScoped(String scope, List<String> issuer,
-                                                List<String> audience) {
-        return withScope(scope).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
+                                                List<String> audience, long expLeeway, long iatLeeway) {
+        return withScope(scope).withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]))
+                .acceptExpiresAt(expLeeway).acceptIssuedAt(iatLeeway);
+    }
+
+    public Verification createVerifierForImplicit(List<String> issuer, List<String> audience, long iatLeeway) {
+        throw new UnsupportedOperationException("you shouldn't call this method");
     }
 
     /**

@@ -20,8 +20,9 @@ public class ImplicitJWT extends JWT.BaseVerification implements Verification{
      * @return
      */
     public Verification createVerifierForImplicit(List<String> issuer,
-                                                List<String> audience) {
-        return withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]));
+                                                List<String> audience, long iatLeeway) {
+        return withIssuer(issuer.toArray(new String[issuer.size()])).withAudience(audience.toArray(new String[audience.size()]))
+                .acceptIssuedAt(iatLeeway);
     }
 
     /**
