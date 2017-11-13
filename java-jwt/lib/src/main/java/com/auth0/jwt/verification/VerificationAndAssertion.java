@@ -48,10 +48,7 @@ public class VerificationAndAssertion {
                     assertValidDateClaim(clock, jwt.getIssuedAt(), (Long) entry.getValue(), false);
                     break;
                 case PublicClaims.NOT_BEFORE:
-                    if(entry.getValue() instanceof Date)
-                        assertValidDateClaim(clock, jwt.getNotBefore(), Long.valueOf(String.valueOf(((Date)entry.getValue()).getTime())), false);
-                    else
-                        assertValidDateClaim(clock, jwt.getNotBefore(), (Long) entry.getValue(), false);
+                    assertValidDateClaim(clock, jwt.getNotBefore(), (Long) entry.getValue(), false);
                     break;
                 case PublicClaims.ISSUER:
                     VerificationAndAssertion.assertValidIssuerClaim(jwt.getIssuer(), (List<String>) entry.getValue());

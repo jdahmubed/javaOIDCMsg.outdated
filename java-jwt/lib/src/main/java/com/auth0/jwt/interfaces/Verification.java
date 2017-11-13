@@ -38,7 +38,7 @@ public interface Verification {
 
     Verification withArrayClaim(String name, Integer... items) throws IllegalArgumentException;
 
-    Verification withNbf(Date nbf);
+    Verification withNbf(long nbf);
 
     Verification createVerifierForScoped(String scope, List<String> issuer,
                                          List<String> audience, long expLeeway, long iatLeeway);

@@ -95,7 +95,7 @@ public class JWT {
         }
 
         @Override
-        public Verification withNbf(Date nbf) {
+        public Verification withNbf(long nbf) {
             throw new UnsupportedOperationException("you shouldn't be calling this method");
         }
 

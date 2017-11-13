@@ -17,7 +17,7 @@ public class ExtendedJWT extends GoogleJWT implements GoogleVerification{
     public Verification createVerifierForExtended(String picture, String email, List<String> issuer,
                                                 List<String> audience, String name, long nbf, long expLeeway, long iatLeeway) {
         Verification verification = createVerifierForGoogle(picture, email, issuer, audience, name, expLeeway, iatLeeway);
-        return verification.acceptNotBefore(nbf);
+        return verification.withNbf(nbf);
     }
 
     public static GoogleVerification require(Algorithm algorithm) {
@@ -35,7 +35,7 @@ public class ExtendedJWT extends GoogleJWT implements GoogleVerification{
      * @return this same Verification instance.
      */
     @Override
-    public Verification withNbf(Date nbf) {
+    public Verification withNbf(long nbf) {
         requireClaim("nbf", nbf);
         return this;
     }
